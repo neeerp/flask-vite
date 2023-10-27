@@ -8,7 +8,7 @@ from click.testing import CliRunner
 from flask import Flask
 
 from flask_vite import Vite, cli
-from flask_vite.npm import NPMError
+from flask_vite.npm import NPM_BIN_PATH, NPMError
 
 
 def test_extension():
@@ -35,13 +35,14 @@ def test_npm():
     app = Flask(__name__)
     vite = Vite(app)
     npm = vite.npm
-    assert npm.npm_bin_path == "npm"
+    assert npm.npm_bin_path == NPM_BIN_PATH
 
     Path("vite").mkdir(exist_ok=True)
 
     with app.app_context():
         npm.run()
         npm.run("--help")
+        raise Exception("Oops")
 
 
 def test_npm_alt_path():

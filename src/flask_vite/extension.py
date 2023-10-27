@@ -2,11 +2,12 @@
 
 import os
 from pathlib import Path
+from sys import platform
 from typing import Optional
 
 from flask import Flask, Response, send_from_directory
 
-from .npm import NPM
+from .npm import NPM, NPM_BIN_PATH
 from .tags import make_tag
 
 ONE_YEAR = 60 * 60 * 24 * 365
@@ -34,7 +35,7 @@ class Vite:
         if config.get("VITE_AUTO_INSERT", True):
             app.after_request(self.after_request)
 
-        npm_bin_path = config.get("VITE_NPM_BIN_PATH", "npm")
+        npm_bin_path = config.get("VITE_NPM_BIN_PATH", NPM_BIN_PATH)
         self.npm = NPM(cwd=str(self._get_root()), npm_bin_path=npm_bin_path)
 
         app.route("/_vite/<path:filename>")(self.vite_static)

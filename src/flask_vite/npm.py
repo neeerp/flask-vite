@@ -1,5 +1,6 @@
 import subprocess
 from dataclasses import dataclass
+from sys import platform
 from textwrap import dedent
 
 # Assume npm is in the path for now.
@@ -18,7 +19,9 @@ class NPM:
     def run(self, *args):
         try:
             _args = [self.npm_bin_path] + list(args)
-            subprocess.run(_args, cwd=self.cwd)
+            subprocess.run(
+                _args, cwd=self.cwd, shell=True if platform == "win32" else False
+            )
         except OSError as e:
             if e.filename == self.npm_bin_path:
                 msg = """
